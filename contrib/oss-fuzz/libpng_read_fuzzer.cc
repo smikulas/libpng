@@ -212,7 +212,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
         default_palette[i].red = default_palette[i].green = default_palette[i].blue = i;
       }
       png_set_quantize(png_handler.png_ptr, default_palette, 256, 
-                       256, nullptr, 0);
+                       200, nullptr, 1);
     }
   }
 
