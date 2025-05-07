@@ -211,8 +211,13 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
       for (int i = 0; i < 256; i++) {
         default_palette[i].red = default_palette[i].green = default_palette[i].blue = i;
       }
+      // Create a histogram manually (one with uniform frequency distribution)
+      png_uint_16 histogram[256];
+      for (int i = 0; i < 256; i++) {
+          histogram[i] = 256;  // Equal frequency for all palette entries
+      }
       png_set_quantize(png_handler.png_ptr, default_palette, 256, 
-                       200, nullptr, 1);
+           200, histogram, 1);
     }
   }
 
