@@ -185,6 +185,16 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   png_set_scale_16(png_handler.png_ptr);
   png_set_tRNS_to_alpha(png_handler.png_ptr);
 
+  png_color_16 background;
+  background.red = 255;
+  background.green = 255;
+  background.blue = 255;
+  background.gray = 255;  // Safe default for grayscale
+  background.index = 0;   // For palette images, though not used in this path
+
+  png_set_background(png_handler.png_ptr, &background,
+                    PNG_BACKGROUND_GAMMA_SCREEN, 0, 1.0);
+
   int passes = png_set_interlace_handling(png_handler.png_ptr);
 
   png_read_update_info(png_handler.png_ptr, png_handler.info_ptr);
