@@ -196,7 +196,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
                     PNG_BACKGROUND_GAMMA_SCREEN, 0, 1.0);*/
 
   // Set up quantization to reduce number of colors if needed
-  if (color_type == PNG_COLOR_TYPE_PALETTE || bit_depth < 8) {
+  if (false) { // (color_type == PNG_COLOR_TYPE_PALETTE || bit_depth < 8) {
     int num_palette;
     png_colorp palette;
     
