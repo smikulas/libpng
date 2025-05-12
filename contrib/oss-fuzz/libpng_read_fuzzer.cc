@@ -191,34 +191,29 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     return 0;
   }
 
-  for (int i = 0; i < 5; i++) {
-    png_byte val = buffer[i];
-    switch (val % 8) {
-    case 0:
-      png_set_gray_to_rgb(png_handler.png_ptr);
-      break;
-    case 1:
-      png_set_bgr(png_handler.png_ptr);
-      break;
-    case 2:
-      png_set_swap(png_handler.png_ptr);
-      break;
-    case 3:
-      png_set_gray_to_rgb(png_handler.png_ptr);
-      break;
-    case 4:
-      png_set_expand(png_handler.png_ptr);
-      break;
-    case 5:
-      png_set_packing(png_handler.png_ptr);
-      break;
-    case 6:
-      png_set_scale_16(png_handler.png_ptr);
-      break;
-    case 7:
-      png_set_tRNS_to_alpha(png_handler.png_ptr);
-      break;
-    }
+  if (buffer[0] % 2 == 0) {
+    png_set_gray_to_rgb(png_handler.png_ptr);
+  }
+  if (buffer[1] % 2 == 0) {
+    png_set_bgr(png_handler.png_ptr);
+  }
+  if (buffer[2] % 2 == 0) {
+    png_set_swap(png_handler.png_ptr);
+  }
+  if (buffer[3] % 2 == 0) {
+    png_set_gray_to_rgb(png_handler.png_ptr);
+  }
+  if (buffer[4] % 2 == 0) {
+    png_set_expand(png_handler.png_ptr);
+  }
+  if (buffer[5] % 2 == 0) {
+    png_set_packing(png_handler.png_ptr);
+  }
+  if (buffer[6] % 2 == 0) {
+    png_set_scale_16(png_handler.png_ptr);
+  }
+  if (buffer[7] % 2 == 0) {
+    png_set_tRNS_to_alpha(png_handler.png_ptr);
   }
 
   // Set several transforms that browsers typically use:
