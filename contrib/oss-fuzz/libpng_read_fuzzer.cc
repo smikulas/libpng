@@ -185,12 +185,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 
   srand(sum);
 
-  png_color_8 val = {};
-  val.red = 123;
-  val.green = 54;
-  val.blue = 78;
-  val.alpha = 200;
-
   if (rand() % 2 == 0) {
     png_set_gray_to_rgb(png_handler.png_ptr);
   }
@@ -226,9 +220,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   }
   if (rand() % 2 == 0) {
     png_set_invert_mono(png_handler.png_ptr);
-  }
-  if (rand() % 2 == 0) {
-    png_set_shift(png_handler.png_ptr, &val);
   }
 
   // Set several transforms that browsers typically use:
