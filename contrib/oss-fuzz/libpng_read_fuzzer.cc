@@ -178,56 +178,12 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     return 0;
   }
 
-  uint32_t sum = 0;
-  for (size_t i = 0; i < size; i++) {
-    sum += (uint32_t) data[i];
-  }
-
-  srand(sum);
-
-  if (rand() % 2 == 0) {
-    png_set_gray_to_rgb(png_handler.png_ptr);
-  }
-  if (rand() % 2 == 0) {
-    png_set_bgr(png_handler.png_ptr);
-  }
-  if (rand() % 2 == 0) {
-    png_set_swap(png_handler.png_ptr);
-  }
-  if (rand() % 2 == 0) {
-    png_set_gray_to_rgb(png_handler.png_ptr);
-  }
-  if (rand() % 2 == 0) {
-    png_set_expand(png_handler.png_ptr);
-  }
-  if (rand() % 2 == 0) {
-    png_set_packing(png_handler.png_ptr);
-  }
-  if (rand() % 2 == 0) {
-    png_set_scale_16(png_handler.png_ptr);
-  }
-  if (rand() % 2 == 0) {
-    png_set_tRNS_to_alpha(png_handler.png_ptr);
-  }
-  if (rand() % 2 == 0) {
-    png_set_swap_alpha(png_handler.png_ptr);
-  }
-  if (rand() % 2 == 0) {
-    png_set_packswap(png_handler.png_ptr);
-  }
-  if (rand() % 2 == 0) {
-    png_set_invert_alpha(png_handler.png_ptr);
-  }
-  if (rand() % 2 == 0) {
-    png_set_invert_mono(png_handler.png_ptr);
-  }
-
   // Set several transforms that browsers typically use:
-  /*png_set_gray_to_rgb(png_handler.png_ptr);
+  png_set_gray_to_rgb(png_handler.png_ptr);
   png_set_expand(png_handler.png_ptr);
   png_set_packing(png_handler.png_ptr);
   png_set_scale_16(png_handler.png_ptr);
-  png_set_tRNS_to_alpha(png_handler.png_ptr);*/
+  png_set_tRNS_to_alpha(png_handler.png_ptr);
 
   png_color_16 background;
   background.red = 255;
