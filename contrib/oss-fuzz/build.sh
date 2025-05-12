@@ -43,11 +43,8 @@ $CXX $CXXFLAGS -std=c++11 -I. \
      -lFuzzingEngine .libs/libpng16.a -lz
 
 # add seed corpus.
-# find $SRC/libpng -name "*interlaced*.png" | grep -v crashers | \
-#      xargs zip $OUT/libpng_read_fuzzer_seed_corpus.zip
-echo AAAAAAAAAAAAAAAAAA
-find $SRC/libpng -name "*interlaced*.png"
-read -p "Press enter to continue"
+find $SRC/libpng -name "*interlaced*.png" | grep -v crashers | \
+     xargs zip $OUT/libpng_read_fuzzer_seed_corpus.zip
 
-# cp $SRC/libpng/contrib/oss-fuzz/*.dict \
-#      $SRC/libpng/contrib/oss-fuzz/*.options $OUT/
+cp $SRC/libpng/contrib/oss-fuzz/*.dict \
+     $SRC/libpng/contrib/oss-fuzz/*.options $OUT/
