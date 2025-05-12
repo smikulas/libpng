@@ -140,6 +140,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   png_set_option(png_handler.png_ptr, PNG_IGNORE_ADLER32, PNG_OPTION_ON);
 #endif
 
+  png_permit_mng_features(png_handler.png_ptr, PNG_FLAG_MNG_FILTER_64);
+
   // Setting up reading from buffer.
   png_handler.buf_state = new BufState();
   png_handler.buf_state->data = data + kPngHeaderSize;
