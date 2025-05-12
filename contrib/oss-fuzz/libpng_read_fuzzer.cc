@@ -108,19 +108,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     return 0;
   }
 
-  // Simplified READ API
-  png_image image;
-  memset(&image, 0, (sizeof image));
-  image.version = PNG_IMAGE_VERSION;
-
-  if (!png_image_begin_read_from_memory(&image, data, size)) {
-    return 0;
-  }
-
-  image.format = PNG_FORMAT_RGBA;
-  std::vector<png_byte> buffer(PNG_IMAGE_SIZE(image));
-  png_image_finish_read(&image, NULL, buffer.data(), 0, NULL);
-
   PngObjectHandler png_handler;
   png_handler.png_ptr = nullptr;
   png_handler.row_ptr = nullptr;
@@ -191,49 +178,56 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     return 0;
   }
 
+  uint32_t sum = 0;
+  for (size_t i = 0; i < size; i++) {
+    sum += (uint32_t) data[i];
+  }
+
+  srand(sum);
+
   png_color_8 val = {};
   val.red = 123;
   val.green = 54;
   val.blue = 78;
   val.alpha = 200;
 
-  if (buffer[0] % 2 == 0) {
+  if (rand() % 2 == 0) {
     png_set_gray_to_rgb(png_handler.png_ptr);
   }
-  if (buffer[1] % 2 == 0) {
+  if (rand() % 2 == 0) {
     png_set_bgr(png_handler.png_ptr);
   }
-  if (buffer[2] % 2 == 0) {
+  if (rand() % 2 == 0) {
     png_set_swap(png_handler.png_ptr);
   }
-  if (buffer[3] % 2 == 0) {
+  if (rand() % 2 == 0) {
     png_set_gray_to_rgb(png_handler.png_ptr);
   }
-  if (buffer[4] % 2 == 0) {
+  if (rand() % 2 == 0) {
     png_set_expand(png_handler.png_ptr);
   }
-  if (buffer[5] % 2 == 0) {
+  if (rand() % 2 == 0) {
     png_set_packing(png_handler.png_ptr);
   }
-  if (buffer[6] % 2 == 0) {
+  if (rand() % 2 == 0) {
     png_set_scale_16(png_handler.png_ptr);
   }
-  if (buffer[7] % 2 == 0) {
+  if (rand() % 2 == 0) {
     png_set_tRNS_to_alpha(png_handler.png_ptr);
   }
-  if (buffer[8] % 2 == 0) {
+  if (rand() % 2 == 0) {
     png_set_swap_alpha(png_handler.png_ptr);
   }
-  if (buffer[9] % 2 == 0) {
+  if (rand() % 2 == 0) {
     png_set_packswap(png_handler.png_ptr);
   }
-  if (buffer[10] % 2 == 0) {
+  if (rand() % 2 == 0) {
     png_set_invert_alpha(png_handler.png_ptr);
   }
-  if (buffer[11] % 2 == 0) {
+  if (rand() % 2 == 0) {
     png_set_invert_mono(png_handler.png_ptr);
   }
-  if (buffer[12] % 2 == 0) {
+  if (rand() % 2 == 0) {
     png_set_shift(png_handler.png_ptr, &val);
   }
 
@@ -298,6 +292,21 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   png_read_end(png_handler.png_ptr, png_handler.end_info_ptr);
 
   PNG_CLEANUP
+
+#ifdef PNG_SIMPLIFIED_READ_SUPPORTED
+  // Simplified READ API
+  png_image image;
+  memset(&image, 0, (sizeof image));
+  image.version = PNG_IMAGE_VERSION;
+
+  if (!png_image_begin_read_from_memory(&image, data, size)) {
+    return 0;
+  }
+
+  image.format = PNG_FORMAT_RGBA;
+  std::vector<png_byte> buffer(PNG_IMAGE_SIZE(image));
+  png_image_finish_read(&image, NULL, buffer.data(), 0, NULL);
+#endif
 
   return 0;
 }
