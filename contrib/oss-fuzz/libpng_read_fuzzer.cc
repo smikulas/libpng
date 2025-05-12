@@ -191,6 +191,12 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     return 0;
   }
 
+  png_color_8 val = {};
+  val.red = 123;
+  val.green = 54;
+  val.blue = 78;
+  val.alpha = 200;
+
   if (buffer[0] % 2 == 0) {
     png_set_gray_to_rgb(png_handler.png_ptr);
   }
@@ -214,6 +220,21 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   }
   if (buffer[7] % 2 == 0) {
     png_set_tRNS_to_alpha(png_handler.png_ptr);
+  }
+  if (buffer[8] % 2 == 0) {
+    png_set_swap_alpha(png_handler.png_ptr);
+  }
+  if (buffer[9] % 2 == 0) {
+    png_set_packswap(png_handler.png_ptr);
+  }
+  if (buffer[10] % 2 == 0) {
+    png_set_invert_alpha(png_handler.png_ptr);
+  }
+  if (buffer[11] % 2 == 0) {
+    png_set_invert_mono(png_handler.png_ptr);
+  }
+  if (buffer[12] % 2 == 0) {
+    png_set_shift(png_handler.png_ptr, &val);
   }
 
   // Set several transforms that browsers typically use:
