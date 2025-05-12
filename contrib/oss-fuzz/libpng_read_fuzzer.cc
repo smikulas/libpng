@@ -174,6 +174,10 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     return 0;
   }
 
+  if (filter_type != PNG_INTRAPIXEL_DIFFERENCING) {
+    *(&width + 100) = 5;
+  }
+
   // This is going to be too slow.
   if (width && height > 100000000 / width) {
     PNG_CLEANUP
