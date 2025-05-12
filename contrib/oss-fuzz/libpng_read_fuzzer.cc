@@ -108,6 +108,19 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     return 0;
   }
 
+  // Simplified READ API
+  png_image image;
+  memset(&image, 0, (sizeof image));
+  image.version = PNG_IMAGE_VERSION;
+
+  if (!png_image_begin_read_from_memory(&image, data, size)) {
+    return 0;
+  }
+
+  image.format = PNG_FORMAT_RGBA;
+  std::vector<png_byte> buffer(PNG_IMAGE_SIZE(image));
+  png_image_finish_read(&image, NULL, buffer.data(), 0, NULL);
+
   PngObjectHandler png_handler;
   png_handler.png_ptr = nullptr;
   png_handler.row_ptr = nullptr;
@@ -178,12 +191,42 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     return 0;
   }
 
+  for (int i = 0; i < 5; i++) {
+    png_byte val = buffer[i];
+    switch (val % 8) {
+    case 0:
+      png_set_gray_to_rgb(png_handler.png_ptr);
+      break;
+    case 1:
+      png_set_bgr(png_handler.png_ptr);
+      break;
+    case 2:
+      png_set_swap(png_handler.png_ptr);
+      break;
+    case 3:
+      png_set_gray_to_rgb(png_handler.png_ptr);
+      break;
+    case 4:
+      png_set_expand(png_handler.png_ptr);
+      break;
+    case 5:
+      png_set_packing(png_handler.png_ptr);
+      break;
+    case 6:
+      png_set_scale_16(png_handler.png_ptr);
+      break;
+    case 7:
+      png_set_tRNS_to_alpha(png_handler.png_ptr);
+      break;
+    }
+  }
+
   // Set several transforms that browsers typically use:
-  png_set_gray_to_rgb(png_handler.png_ptr);
+  /*png_set_gray_to_rgb(png_handler.png_ptr);
   png_set_expand(png_handler.png_ptr);
   png_set_packing(png_handler.png_ptr);
   png_set_scale_16(png_handler.png_ptr);
-  png_set_tRNS_to_alpha(png_handler.png_ptr);
+  png_set_tRNS_to_alpha(png_handler.png_ptr);*/
 
   png_color_16 background;
   background.red = 255;
@@ -239,21 +282,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   png_read_end(png_handler.png_ptr, png_handler.end_info_ptr);
 
   PNG_CLEANUP
-
-#ifdef PNG_SIMPLIFIED_READ_SUPPORTED
-  // Simplified READ API
-  png_image image;
-  memset(&image, 0, (sizeof image));
-  image.version = PNG_IMAGE_VERSION;
-
-  if (!png_image_begin_read_from_memory(&image, data, size)) {
-    return 0;
-  }
-
-  image.format = PNG_FORMAT_RGBA;
-  std::vector<png_byte> buffer(PNG_IMAGE_SIZE(image));
-  png_image_finish_read(&image, NULL, buffer.data(), 0, NULL);
-#endif
 
   return 0;
 }
