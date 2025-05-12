@@ -140,8 +140,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   png_set_option(png_handler.png_ptr, PNG_IGNORE_ADLER32, PNG_OPTION_ON);
 #endif
 
-  png_permit_mng_features(png_handler.png_ptr, PNG_FLAG_MNG_FILTER_64);
-
   // Setting up reading from buffer.
   png_handler.buf_state = new BufState();
   png_handler.buf_state->data = data + kPngHeaderSize;
@@ -172,10 +170,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
                     &compression_type, &filter_type)) {
     PNG_CLEANUP
     return 0;
-  }
-
-  if (filter_type != PNG_INTRAPIXEL_DIFFERENCING) {
-    *(&width + 100) = 5;
   }
 
   // This is going to be too slow.
