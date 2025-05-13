@@ -24,7 +24,6 @@
 
 # Disable logging via library build configuration control.
 
-echo ">> [DEBUG] Running build.sh for libpng with custom modifications"
 cat scripts/pnglibconf.dfa | \
   sed -e "s/option STDIO/option STDIO disabled/" \
       -e "s/option WARNING /option WARNING disabled/" \
@@ -44,9 +43,9 @@ $CXX $CXXFLAGS -std=c++11 -I. \
      -o $OUT/libpng_read_fuzzer \
      -lFuzzingEngine .libs/libpng16.a -lz
 
-# # add seed corpus.
-# find $SRC/libpng -name "*.mng" | grep -v crashers | \
-#      xargs zip $OUT/libpng_read_fuzzer_seed_corpus.zip
+# add seed corpus.
+find $SRC/libpng -name "*.mng" | grep -v crashers | \
+     xargs zip $OUT/libpng_read_fuzzer_seed_corpus.zip
 
-# cp $SRC/libpng/contrib/oss-fuzz/*.dict \
-#      $SRC/libpng/contrib/oss-fuzz/*.options $OUT/
+cp $SRC/libpng/contrib/oss-fuzz/*.dict \
+     $SRC/libpng/contrib/oss-fuzz/*.options $OUT/
