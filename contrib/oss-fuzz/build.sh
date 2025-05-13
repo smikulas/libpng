@@ -23,6 +23,8 @@
 ################################################################################
 
 # Disable logging via library build configuration control.
+
+echo ">> [DEBUG] Running build.sh for libpng with custom modifications"
 cat scripts/pnglibconf.dfa | \
   sed -e "s/option STDIO/option STDIO disabled/" \
       -e "s/option WARNING /option WARNING disabled/" \
