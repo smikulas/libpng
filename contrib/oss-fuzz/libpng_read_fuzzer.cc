@@ -179,13 +179,13 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   }
 
   // Set several transforms that browsers typically use:
-  /*png_set_gray_to_rgb(png_handler.png_ptr);
+  png_set_gray_to_rgb(png_handler.png_ptr);
   png_set_expand(png_handler.png_ptr);
   png_set_packing(png_handler.png_ptr);
   png_set_scale_16(png_handler.png_ptr);
-  png_set_tRNS_to_alpha(png_handler.png_ptr);*/
+  png_set_tRNS_to_alpha(png_handler.png_ptr);
 
-  /*png_color_16 background;
+  png_color_16 background;
   background.red = 255;
   background.green = 255;
   background.blue = 255;
@@ -193,10 +193,10 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   background.index = 0;   // For palette images, though not used in this path
 
   png_set_background(png_handler.png_ptr, &background,
-                    PNG_BACKGROUND_GAMMA_SCREEN, 0, 1.0);*/
+                    PNG_BACKGROUND_GAMMA_SCREEN, 0, 1.0);
 
   // Set up quantization to reduce number of colors if needed
-  if (false) { // (color_type == PNG_COLOR_TYPE_PALETTE || bit_depth < 8) {
+  if (color_type == PNG_COLOR_TYPE_PALETTE || bit_depth < 8) {
     int num_palette;
     png_colorp palette;
     
