@@ -215,8 +215,18 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   }
 
   // image.format = PNG_FORMAT_RGBA;
+  image.format = PNG_FORMAT_RGB_COLORMAP;
   std::vector<png_byte> buffer(PNG_IMAGE_SIZE(image));
-  png_image_finish_read(&image, NULL, buffer.data(), 0, NULL);
+  
+  // Create a colormap with 256 entries
+  png_color colormap[256];
+  for (int i = 0; i < 256; i++) {
+    colormap[i].red = i;
+    colormap[i].green = i;
+    colormap[i].blue = i;
+  }
+  
+  png_image_finish_read(&image, NULL, buffer.data(), 0, colormap);
 #endif
 
   return 0;
