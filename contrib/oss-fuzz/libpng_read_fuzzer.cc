@@ -185,42 +185,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   png_set_scale_16(png_handler.png_ptr);
   png_set_tRNS_to_alpha(png_handler.png_ptr);
 
-  png_color_16 background;
-  background.red = 255;
-  background.green = 255;
-  background.blue = 255;
-  background.gray = 255;  // Safe default for grayscale
-  background.index = 0;   // For palette images, though not used in this path
-
-  png_set_background(png_handler.png_ptr, &background,
-                    PNG_BACKGROUND_GAMMA_SCREEN, 0, 1.0);
-
-  // Set up quantization to reduce number of colors if needed
-  if (color_type == PNG_COLOR_TYPE_PALETTE || bit_depth < 8) {
-    int num_palette;
-    png_colorp palette;
-    
-    if (png_get_PLTE(png_handler.png_ptr, png_handler.info_ptr, &palette, &num_palette)) {
-      // Use quantization with the existing palette
-      png_set_quantize(png_handler.png_ptr, palette, num_palette, 
-                       256, nullptr, 0);
-    } else {
-      // If no palette is present but we need to quantize (e.g., for grayscale),
-      // create a default palette and use it
-      png_color default_palette[256];
-      for (int i = 0; i < 256; i++) {
-        default_palette[i].red = default_palette[i].green = default_palette[i].blue = i;
-      }
-      // Create a histogram manually (one with uniform frequency distribution)
-      png_uint_16 histogram[256];
-      for (int i = 0; i < 256; i++) {
-          histogram[i] = 256;  // Equal frequency for all palette entries
-      }
-      png_set_quantize(png_handler.png_ptr, default_palette, 256, 
-           200, histogram, 1);
-    }
-  }
-
   int passes = png_set_interlace_handling(png_handler.png_ptr);
 
   png_read_update_info(png_handler.png_ptr, png_handler.info_ptr);
@@ -250,7 +214,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     return 0;
   }
 
-  image.format = PNG_FORMAT_RGBA;
+  // image.format = PNG_FORMAT_RGBA;
   std::vector<png_byte> buffer(PNG_IMAGE_SIZE(image));
   png_image_finish_read(&image, NULL, buffer.data(), 0, NULL);
 #endif
